@@ -1,0 +1,64 @@
+html {
+    font-size: 62.5%
+}
+
+body {
+  font-size: 1.5em; /* currently ems cause chrome bug misinterpreting rems on body element */
+  line-height: 1.6;
+  font-weight: 400;
+  font-family: sans-serif;
+  color: #222;
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.row {
+    display: flex;
+}
+
+#menu {
+    display: inline-block;
+    background-color: black;
+    color: grey;
+    font-family: sans-serif;
+    height: 100vh;
+    min-width: 200px;
+    max-width: 15%;
+    float: left;
+}
+
+#main-content {
+    height: 100vh;
+    display: inline-block;
+    width: 100%;
+    float:left;
+    background-color: #EAEAEA;
+    box-shadow:-5px 0px 5px #404040;
+    position:relative
+}
+
+#searchBox {
+    margin: 0 auto;
+    display: block;
+    margin-top: 10px;
+    width: 80%;
+    height: 20px;
+}
+
+#inputBox {
+    position: absolute;
+    bottom: 10px;
+    min-height: 60px;
+    max-height: 20vh;
+    width: 90%;
+    margin-left: 10px;
+    padding-left: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: white;
+    
+}

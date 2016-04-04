@@ -2,25 +2,36 @@
 Server Thing
 """
 
+import logging
 import asyncio
 import websockets
 
-# async def consumer(message, path, ws):
-#     """Process and send message to all who listen"""
-#     ws.send(message)
-
 CHANNELS = {}
 HISTORY_LENGTH = 10
+LOGGING_FORMAT = "%(asctime)s - %(message)s"
+
+logging.basicConfig(format=LOGGING_FORMAT, filename="logging.log", level=logging.DEBUG)
 
 async def handler(websocket, path):
     """Take and Echo to all who are connected"""
+
+    path = path.split("/")[1]
+    if path == '':
+        path = "root"
+
     try:
         CHANNELS[path]["users"].append(websocket)
-        print("Connected", path)
+        logging.info("%s connected to #%s", websocket.remote_address, path)
+
     except KeyError:
         CHANNELS[path] = {"history":[]}
         CHANNELS[path]["users"] = []
         CHANNELS[path]["users"].append(websocket)
+        logging.info("%s:%s created channel #%s",
+                     websocket.remote_address[0],
+                     websocket.remote_address[1],
+                     path)
+
     if len(CHANNELS[path]["history"]) > 0:
         for msg in CHANNELS[path]["history"]:
             await websocket.send(msg)
@@ -36,9 +47,10 @@ async def handler(websocket, path):
             if message != "":
                 for user in CHANNELS[path]["users"]:
                     await user.send(message)
+
     except websockets.exceptions.ConnectionClosed:
         CHANNELS[path]["users"].remove(websocket)
-        print("disconnect")
+    logging.info("%s disconneced from #%s", websocket.remote_address, path)
 
 START_SERVER = websockets.serve(handler, 'localhost', 8080)
 
